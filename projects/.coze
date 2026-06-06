@@ -1,0 +1,6 @@
+[project]
+requires = []
+project_type = ""
+
+[preview]
+preview_enable = "disabled"
