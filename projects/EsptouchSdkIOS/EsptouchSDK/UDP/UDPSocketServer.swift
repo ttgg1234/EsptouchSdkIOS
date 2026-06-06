@@ -81,10 +81,8 @@ public class UDPSocketServer {
             return UnsafeMutableRawPointer(ptr).assumingMemoryBound(to: sockaddr.self)
         }
         
-        let receivedLen = withUnsafeMutableBytes(of: &buffer) { ptr -> Int in
-            return ptr.withMemoryRebound(to: CChar.self, capacity: buffer.count) { cPtr in
-                return recvfrom(socket, cPtr, buffer.count, 0, senderAddrPtr, &senderAddrLen)
-            }
+        let receivedLen = buffer.withUnsafeMutableBytes { ptr -> Int in
+            return recvfrom(socket, ptr.baseAddress, buffer.count, 0, senderAddrPtr, &senderAddrLen)
         }
         
         if receivedLen > 0 {

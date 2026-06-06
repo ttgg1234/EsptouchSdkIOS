@@ -14,7 +14,7 @@ class __EsptouchTask {
     
     private var isInterrupt: Bool = false
     private var isExecuted: Bool = false
-    private var isCancelled: Bool = false
+    private var _isCancelled: Bool = false
     private var esptouchResultList: [IEsptouchResult] = []
     private var bssidTaskSucCountMap: [String: Int] = [:]
     private var listener: IEsptouchListener?
@@ -44,13 +44,13 @@ class __EsptouchTask {
     
     /// Interrupt the task
     func interrupt() {
-        isCancelled = true
+        _isCancelled = true
         __interrupt()
     }
     
     /// Check if cancelled
     func isCancelled() -> Bool {
-        return isCancelled
+        return _isCancelled
     }
     
     /// Execute and return single result
@@ -209,7 +209,7 @@ class __EsptouchTask {
     
     private func createFailResult() -> IEsptouchResult {
         let result = EsptouchResult(isSuc: false, bssid: nil, inetAddress: nil)
-        result.setIsCancelled(isCancelled)
+        result.setIsCancelled(_isCancelled)
         return result
     }
 }

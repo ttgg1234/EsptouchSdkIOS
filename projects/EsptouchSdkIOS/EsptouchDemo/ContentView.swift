@@ -1,7 +1,5 @@
 import SwiftUI
 import EsptouchSDK
-import SystemConfiguration.CaptiveNetwork
-import NetworkExtension
 
 struct ContentView: View {
     @State private var wifiName: String = ""
@@ -173,7 +171,7 @@ struct ContentView: View {
         var ssid: String?
         if let interfaces = CNCopySupportedInterfaces() as? [String] {
             for interface in interfaces {
-                if let networkInfo = CNCopyCurrentNetworkInfo(interface as CFString) as NSDictionary? {
+                if let networkInfo = CNCopyCurrentNetworkInfo(interface as CFString) as? [String: Any] {
                     ssid = networkInfo[kCNNetworkInfoKeySSID as String] as? String
                     break
                 }
@@ -190,7 +188,7 @@ struct ContentView: View {
         var bssid: String?
         if let interfaces = CNCopySupportedInterfaces() as? [String] {
             for interface in interfaces {
-                if let networkInfo = CNCopyCurrentNetworkInfo(interface as CFString) as NSDictionary? {
+                if let networkInfo = CNCopyCurrentNetworkInfo(interface as CFString) as? [String: Any] {
                     bssid = networkInfo[kCNNetworkInfoKeyBSSID as String] as? String
                     break
                 }

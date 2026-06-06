@@ -15,13 +15,13 @@ public struct EsptouchConstant {
     public static let DATA_CODE_LEN = TOTAL_DATA_LEN - GUIDE_CODE_LEN
     
     /// The timeout for waiting UDP response (milliseconds)
-    public static final var WAIT_UDP_TIME_MILLIS: Int = 15000
+    public static var WAIT_UDP_TIME_MILLIS: Int = 15000
     
     /// The timeout for waiting UDP response after device connected (milliseconds)
-    public static final var WAIT_UDP_TIME_MILLIS_DEVCONN: Int = 8000
+    public static var WAIT_UDP_TIME_MILLIS_DEVCONN: Int = 8000
     
     /// The interval for sending UDP broadcast (milliseconds)
-    public static final var BROADCAST_INTERVAL_MILLIS: Int = 8
+    public static var BROADCAST_INTERVAL_MILLIS: Int = 8
     
     /// The port for listening UDP response
     public static let PORT_LISTENING: Int = 18266
