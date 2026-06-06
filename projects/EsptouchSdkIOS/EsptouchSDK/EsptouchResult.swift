@@ -21,10 +21,10 @@ public protocol IEsptouchResult {
 /// ESP-Touch result implementation
 public class EsptouchResult: IEsptouchResult {
     
-    private let isSuc: Bool
+    private let _isSuc: Bool
     private let bssid: String?
     private let inetAddress: String?
-    private var isCancelled: Bool = false
+    private var _isCancelled: Bool = false
     
     /// Initialize with result data
     /// - Parameters:
@@ -32,7 +32,7 @@ public class EsptouchResult: IEsptouchResult {
     ///   - bssid: Device BSSID
     ///   - inetAddress: Device IP address
     public init(isSuc: Bool, bssid: String?, inetAddress: String?) {
-        self.isSuc = isSuc
+        self._isSuc = isSuc
         self.bssid = bssid
         self.inetAddress = inetAddress
     }
@@ -46,14 +46,14 @@ public class EsptouchResult: IEsptouchResult {
     }
     
     public func isSuc() -> Bool {
-        return isSuc
+        return _isSuc
     }
     
     public func isCancelled() -> Bool {
-        return isCancelled
+        return _isCancelled
     }
     
     public func setIsCancelled(_ cancelled: Bool) {
-        self.isCancelled = cancelled
+        self._isCancelled = cancelled
     }
 }

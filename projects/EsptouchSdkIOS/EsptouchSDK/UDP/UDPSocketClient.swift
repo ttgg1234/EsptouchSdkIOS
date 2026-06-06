@@ -61,9 +61,7 @@ public class UDPSocketClient {
             guard !isStop else { break }
             
             let sendResult = packet.withUnsafeBytes { ptr -> Int in
-                return ptr.withMemoryRebound(to: CChar.self, capacity: packet.count) { cPtr in
-                    return sendto(socket, cPtr, packet.count, 0, targetAddrPtr, socklen_t(MemoryLayout<sockaddr_in>.size))
-                }
+                return sendto(socket, ptr.baseAddress, packet.count, 0, targetAddrPtr, socklen_t(MemoryLayout<sockaddr_in>.size))
             }
             
             if sendResult < 0 {
@@ -99,9 +97,7 @@ public class UDPSocketClient {
         }
         
         _ = data.withUnsafeBytes { ptr -> Int in
-            return ptr.withMemoryRebound(to: CChar.self, capacity: data.count) { cPtr in
-                return sendto(socket, cPtr, data.count, 0, targetAddrPtr, socklen_t(MemoryLayout<sockaddr_in>.size))
-            }
+            return sendto(socket, ptr.baseAddress, data.count, 0, targetAddrPtr, socklen_t(MemoryLayout<sockaddr_in>.size))
         }
     }
 }
