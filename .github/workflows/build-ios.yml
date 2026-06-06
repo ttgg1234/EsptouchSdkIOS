@@ -3,8 +3,6 @@ name: Build iOS
 on:
   workflow_dispatch:
   push:
-    paths:
-      - 'projects/EsptouchSdkIOS/**'
 
 jobs:
   build:
@@ -14,6 +12,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Debug - Show repo structure
+        run: |
+          echo "=== Root ==="
+          ls -la
+          echo ""
+          echo "=== All directories (3 levels) ==="
+          find . -maxdepth 3 -type d | head -50
 
       - name: Install XcodeGen
         run: brew install xcodegen
@@ -25,6 +31,7 @@ jobs:
       - name: Build EsptouchSDK Framework
         working-directory: projects/EsptouchSdkIOS
         run: |
+          set -o pipefail
           xcodebuild build \
             -project EsptouchSDK.xcodeproj \
             -scheme EsptouchSDK \
@@ -37,11 +44,12 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            | xcpretty
+            2>&1 | tail -50
 
       - name: Build EsptouchDemo App
         working-directory: projects/EsptouchSdkIOS
         run: |
+          set -o pipefail
           xcodebuild build \
             -project EsptouchSDK.xcodeproj \
             -scheme EsptouchDemo \
@@ -52,16 +60,27 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            | xcpretty
+            2>&1 | tail -50
+
+      - name: Debug - Show DerivedData structure
+        working-directory: projects/EsptouchSdkIOS
+        run: |
+          echo "=== DerivedData directories ==="
+          find build/DerivedData -type d -maxdepth 5 | head -80
+          echo ""
+          echo "=== All .framework files ==="
+          find build/DerivedData -name "*.framework" -type d 2>/dev/null || echo "No frameworks found"
+          echo ""
+          echo "=== All .app files ==="
+          find build/DerivedData -name "*.app" -type d 2>/dev/null || echo "No apps found"
+          echo ""
+          echo "=== Build/Products directory ==="
+          find build/DerivedData/Build/Products -type d -maxdepth 3 2>/dev/null || echo "No Products directory"
 
       - name: Prepare artifacts
         working-directory: projects/EsptouchSdkIOS
         run: |
           mkdir -p build-output
-
-          echo "=== Searching for build products ==="
-          find build/DerivedData -name "*.framework" -type d 2>/dev/null || true
-          find build/DerivedData -name "*.app" -type d 2>/dev/null || true
 
           # 复制 SDK Framework
           FRAMEWORK_PATH=$(find build/DerivedData -name "EsptouchSDK.framework" -type d | head -1)
